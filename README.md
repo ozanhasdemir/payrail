@@ -42,9 +42,17 @@ pnpm web
 
 Contracts: see `contracts/README.md`.
 
-## Deployed addresses (Arc testnet)
+## Deployed addresses (Arc testnet, chain id 5042002)
 
-Filled in after Day 2 deploy.
+| Contract | Address |
+|---|---|
+| InvoiceRegistry | [`0x6883e1465a1d1017392ccad68b1d137aec911db7`](https://testnet.arcscan.app/address/0x6883e1465a1d1017392ccad68b1d137aec911db7) |
+| ReceivableToken | [`0x75498b299A16A21355b40437f819726aF79Cc1dc`](https://testnet.arcscan.app/address/0x75498b299A16A21355b40437f819726aF79Cc1dc) |
+| EarlyPayPool | [`0x45029f750496fad8a103bdfd1258f493b8f368b6`](https://testnet.arcscan.app/address/0x45029f750496fad8a103bdfd1258f493b8f368b6) |
+
+Amounts are native USDC with 18 decimals, so 1 USDC = `1e18`. Pool rate: 12% APR (`annualRateBps = 1200`).
+
+ENS: `payrail.eth` on the ENSv2 Sepolia beta, resolver `0x65044F7DFb2183bB4Ce5cb022c7CF80431d8C252`. Supplier records live under wildcard subnames such as `acme.payrail.eth`.
 
 ## License
 
