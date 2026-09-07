@@ -28,7 +28,7 @@ contract InvoiceRegistry {
         uint64 dueDate; // unix seconds
         uint64 submittedAt;
         Status status;
-        string reference; // supplier invoice number, e.g. "INV-2026-0142"
+        string invoiceNumber; // supplier invoice number, e.g. "INV-2026-0142"
     }
 
     ReceivableToken public immutable receivable;
@@ -43,7 +43,7 @@ contract InvoiceRegistry {
         uint256 amount,
         uint64 dueDate,
         bytes32 docHash,
-        string reference
+        string invoiceNumber
     );
     event InvoiceApproved(uint256 indexed id, address indexed buyer);
     event InvoiceRejected(uint256 indexed id, address indexed buyer, string reason);
@@ -79,7 +79,7 @@ contract InvoiceRegistry {
 
     /// @notice Anyone may submit (the supplier, or the buyer's agent after parsing). Only the
     ///         named buyer can approve, so a bogus submission is inert.
-    function submit(bytes32 docHash, address buyer, address supplier, uint256 amount, uint64 dueDate, string calldata reference)
+    function submit(bytes32 docHash, address buyer, address supplier, uint256 amount, uint64 dueDate, string calldata invoiceNumber)
         external
         returns (uint256 id)
     {
@@ -98,11 +98,11 @@ contract InvoiceRegistry {
             dueDate: dueDate,
             submittedAt: uint64(block.timestamp),
             status: Status.Submitted,
-            reference: reference
+            invoiceNumber: invoiceNumber
         });
         idByDocHash[docHash] = id;
 
-        emit InvoiceSubmitted(id, buyer, supplier, amount, dueDate, docHash, reference);
+        emit InvoiceSubmitted(id, buyer, supplier, amount, dueDate, docHash, invoiceNumber);
     }
 
     /// @notice Buyer accepts the invoice. Mints the receivable to the supplier.
