@@ -19,6 +19,14 @@ Checked against live docs on 2026-09-07. Each line either confirms a roadmap ass
 
 **Plan:** buyer wallet policy = `to in [InvoiceRegistry]` and `value lte 5000e18`. Invoices above the cap are routed to a second wallet owned by a 2-of-3 key quorum.
 
+**Day 1 result (2026-09-07):** built entirely through the REST API and Node SDK, no dashboard clicking beyond creating the app.
+
+- Three P-256 authorization keys generated locally with openssl: agent, approver 1, approver 2. Two key quorums: `payrail-agent` (1 of 1) and `payrail-approvers-2of3`.
+- Two wallets: `payrail-buyer-ops` owned by the agent quorum, policy `to == registry, chain_id == 5042002, value <= 5 USDC`; `payrail-buyer-treasury` owned by the approvers quorum, policy `to == registry, chain_id == 5042002`, no cap. Both policies are owned by the approvers quorum, so the agent cannot loosen its own limits. Testnet cap is 5 USDC; the demo narrates it as $5,000.
+- `eth_sendTransaction` on Arc fails with `App is not authorized to transact on chain eip155:5042002`. `eth_signTransaction` works for any chain id and runs through the same policy engine. So the agent builds the transaction (nonce, gas, Arc's 20 gwei floor), asks Privy to sign, and broadcasts through its own Arc RPC. Policies therefore carry rules for both methods. `agent/src/scripts/privy-policies.ts` reconciles the rules idempotently and re-points them after a redeploy.
+- Gate run: 4.2 USDC approve and pay from ops passed; 6 USDC from ops returned `RPC request denied due to policy violation`; the same invoice paid from treasury with two approver signatures. Contract change along the way: `pay()` accepts any payer, approval stays buyer-only, so a treasury wallet can settle what the ops wallet approved.
+- Watch out: a gas-estimation failure (insufficient funds, contract revert) looks like a denial if you don't read the error. The smoke test now pre-checks balances.
+
 ## ENSv2 on Sepolia
 
 - Beta is live. App at `https://app.ens.dev`. Addresses in `.env.example`.
