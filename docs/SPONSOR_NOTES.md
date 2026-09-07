@@ -30,11 +30,14 @@ Checked against live docs on 2026-09-07. Each line either confirms a roadmap ass
 
 ## World ID Selfie Check
 
-- **Beta, gated.** Access must be requested by email to `developers@toolsforhumanity.com`. Nothing else to configure until they enable it on the app.
+- World is the sponsor. Tools for Humanity is the company that builds World and World ID, which is why the generic docs point at a toolsforhumanity.com email. Hackers do not use that email.
+- **Access for ETHOnline:** World's prize page links a Sandbox Access Form. Fill it with the app id from developer.world.org. Sandbox mode has test users, so no real selfie is needed during development. Testing guide: `docs.world.org/world-id/sandbox/testing-selfie-check`.
 - Once enabled: IDKit preset `selfieCheckLegacy({ signal })`, works on web through `@worldcoin/idkit`, proof verified server-side via the verification endpoint.
-- Fallback if access does not arrive in time: `proofOfHuman` preset. Same flow, weaker claim on the Selfie Check bounty.
+- **Prize requires a feedback document** covering the Selfie Check docs and integration flow, Developer Portal navigation and debugging, sandbox states, proof flows, test users, errors and edge cases, and what was confusing, missing, or broken. Ozan keeps notes from the first portal login onward; Claude compiles them into `docs/WORLD_FEEDBACK.md` on Day 5.
+- Prize is split, up to 3 teams at $1,166 each, so the feedback document is what separates us from other entries.
+- Fallback if sandbox access does not arrive in time: `proofOfHuman` preset. Same flow, weaker claim on the bounty.
 
-**Action today:** send the access request email, mention ETHOnline 2026 and the app id.
+**Action today:** create the app on developer.world.org, then submit the Sandbox Access Form from the World prize page.
 
 ## Circle Agent Wallets
 
