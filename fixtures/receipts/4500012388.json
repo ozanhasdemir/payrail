@@ -1,0 +1,9 @@
+{
+  "poNumber": "4500012388",
+  "receivedAt": "2026-09-05",
+  "receivingLocation": "DC-01",
+  "lines": [
+    { "lineNumber": 1, "sku": "NW-SPW-500", "quantityReceived": 200 },
+    { "lineNumber": 2, "sku": "NW-CBW-330", "quantityReceived": 380 }
+  ]
+}

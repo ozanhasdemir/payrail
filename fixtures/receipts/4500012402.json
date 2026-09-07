@@ -1,0 +1,9 @@
+{
+  "poNumber": "4500012402",
+  "receivedAt": "2026-09-04",
+  "receivingLocation": "DC-01",
+  "lines": [
+    { "lineNumber": 1, "sku": "BR-CB-4832", "quantityReceived": 300 },
+    { "lineNumber": 2, "sku": "BR-SF-2080", "quantityReceived": 150 }
+  ]
+}

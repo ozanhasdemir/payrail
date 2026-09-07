@@ -1,0 +1,13 @@
+{
+  "poNumber": "4500012402",
+  "issuedAt": "2026-08-18",
+  "buyer": { "name": "Harbor Wholesale Inc", "shipTo": "Harbor Wholesale Central DC, 1200 Port Road, Savannah GA 31401" },
+  "supplier": { "name": "Blue Ridge Packaging Co", "code": "BRPKG", "ens": "blueridge.payrail.eth" },
+  "currency": "USD",
+  "terms": { "netDays": 60 },
+  "lines": [
+    { "lineNumber": 1, "sku": "BR-CB-4832", "description": "Corrugated Shipper 48x32x30 Double Wall", "quantity": 300, "uom": "CT", "unitPrice": 32.0 },
+    { "lineNumber": 2, "sku": "BR-SF-2080", "description": "Stretch Film 20in x 1000ft 80ga", "quantity": 150, "uom": "RL", "unitPrice": 20.0 }
+  ],
+  "total": 12600.0
+}

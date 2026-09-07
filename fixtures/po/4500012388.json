@@ -1,0 +1,13 @@
+{
+  "poNumber": "4500012388",
+  "issuedAt": "2026-08-22",
+  "buyer": { "name": "Harbor Wholesale Inc", "shipTo": "Harbor Wholesale Central DC, 1200 Port Road, Savannah GA 31401" },
+  "supplier": { "name": "Northwind Beverages Inc", "code": "NWBEV", "ens": "northwind.payrail.eth" },
+  "currency": "USD",
+  "terms": { "netDays": 30 },
+  "lines": [
+    { "lineNumber": 1, "sku": "NW-SPW-500", "description": "Sparkling Water Lime 24x500ml", "quantity": 200, "uom": "CA", "unitPrice": 9.25 },
+    { "lineNumber": 2, "sku": "NW-CBW-330", "description": "Cold Brew Coffee 12x330ml", "quantity": 400, "uom": "CA", "unitPrice": 11.9 }
+  ],
+  "total": 6610.0
+}

@@ -1,0 +1,13 @@
+{
+  "poNumber": "4500012345",
+  "issuedAt": "2026-08-20",
+  "buyer": { "name": "Harbor Wholesale Inc", "shipTo": "Harbor Wholesale Central DC, 1200 Port Road, Savannah GA 31401" },
+  "supplier": { "name": "Acme Foods LLC", "code": "ACME", "ens": "acme.payrail.eth" },
+  "currency": "USD",
+  "terms": { "netDays": 30, "discountPercent": 2, "discountDays": 10 },
+  "lines": [
+    { "lineNumber": 1, "sku": "AF-1001", "description": "Organic Tomato Sauce 24x680g", "quantity": 120, "uom": "CA", "unitPrice": 18.5 },
+    { "lineNumber": 2, "sku": "AF-2044", "description": "Extra Virgin Olive Oil 12x1L", "quantity": 80, "uom": "CA", "unitPrice": 24.75 }
+  ],
+  "total": 4200.0
+}

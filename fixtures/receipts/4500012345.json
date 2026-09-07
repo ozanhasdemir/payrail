@@ -1,0 +1,9 @@
+{
+  "poNumber": "4500012345",
+  "receivedAt": "2026-09-03",
+  "receivingLocation": "DC-01",
+  "lines": [
+    { "lineNumber": 1, "sku": "AF-1001", "quantityReceived": 120 },
+    { "lineNumber": 2, "sku": "AF-2044", "quantityReceived": 80 }
+  ]
+}
