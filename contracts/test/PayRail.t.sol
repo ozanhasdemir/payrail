@@ -64,6 +64,20 @@ contract PayRailTest is Test {
         registry.approve(id);
     }
 
+    function test_anyWalletMaySettleApprovedInvoice() public {
+        uint256 id = _submit(30);
+        vm.prank(buyer);
+        registry.approve(id);
+
+        address treasury = makeAddr("treasury");
+        vm.deal(treasury, AMOUNT);
+        vm.prank(treasury);
+        registry.pay{value: AMOUNT}(id);
+
+        assertEq(supplier.balance, AMOUNT);
+        assertEq(uint8(registry.getInvoice(id).status), uint8(InvoiceRegistry.Status.Settled));
+    }
+
     function test_payRequiresExactAmount() public {
         uint256 id = _submit(30);
         vm.prank(buyer);

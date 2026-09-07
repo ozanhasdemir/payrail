@@ -46,9 +46,9 @@ Contracts: see `contracts/README.md`.
 
 | Contract | Address |
 |---|---|
-| InvoiceRegistry | [`0x6883e1465a1d1017392ccad68b1d137aec911db7`](https://testnet.arcscan.app/address/0x6883e1465a1d1017392ccad68b1d137aec911db7) |
-| ReceivableToken | [`0x75498b299A16A21355b40437f819726aF79Cc1dc`](https://testnet.arcscan.app/address/0x75498b299A16A21355b40437f819726aF79Cc1dc) |
-| EarlyPayPool | [`0x45029f750496fad8a103bdfd1258f493b8f368b6`](https://testnet.arcscan.app/address/0x45029f750496fad8a103bdfd1258f493b8f368b6) |
+| InvoiceRegistry | [`0x9be7b5ab46d311eda6c4be4f61c981fe8afbbc90`](https://testnet.arcscan.app/address/0x9be7b5ab46d311eda6c4be4f61c981fe8afbbc90) |
+| ReceivableToken | [`0x4ADeF613F08c79D65685b7fED7de51c2d401CAec`](https://testnet.arcscan.app/address/0x4ADeF613F08c79D65685b7fED7de51c2d401CAec) |
+| EarlyPayPool | [`0x58bb089d20938e3e161792b9e5d75fec22910ea5`](https://testnet.arcscan.app/address/0x58bb089d20938e3e161792b9e5d75fec22910ea5) |
 
 Amounts are native USDC with 18 decimals, so 1 USDC = `1e18`. Pool rate: 12% APR (`annualRateBps = 1200`).
 

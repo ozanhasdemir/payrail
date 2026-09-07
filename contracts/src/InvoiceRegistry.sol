@@ -126,11 +126,12 @@ contract InvoiceRegistry {
         emit InvoiceRejected(id, msg.sender, reason);
     }
 
-    /// @notice Buyer pays the full amount as native USDC. Funds go to the current receivable
+    /// @notice Settle an approved invoice with the full amount as native USDC. Any wallet may pay
+    ///         (a buyer's ops wallet, its treasury wallet, or a third party settling on its
+    ///         behalf); approval is what required the buyer. Funds go to the current receivable
     ///         holder: the supplier, or the pool that bought the receivable.
     function pay(uint256 id) external payable {
         Invoice storage inv = _invoices[id];
-        if (msg.sender != inv.buyer) revert NotBuyer();
         if (inv.status != Status.Approved) revert WrongStatus(inv.status);
         if (msg.value != inv.amount) revert WrongAmount(inv.amount, msg.value);
 
