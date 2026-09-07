@@ -4,7 +4,7 @@ Six days, Sept 7 to 12, submission Friday night, hard stop Saturday Sept 13 10:0
 
 | Day | Goal | Gate |
 |---|---|---|
-| Sun 7 | Every external dependency proven with one real tx | Policy-gated Privy transfer on Arc, ENS subname resolves |
+| Sun 7 | Every external dependency proven with one real tx | Policy-gated Privy transfer on Arc (pending Privy keys), ENS subname resolves (DONE) |
 | Mon 8 | Contracts deployed, agent parses and matches | Fixture 810 becomes an approved invoice on-chain |
 | Tue 9 | Money moves both paths | Auto-pay, blocked then approved pay, one receivable sold |
 | Wed 10 | Dashboard complete, World check enforced | Full demo runs without touching code |

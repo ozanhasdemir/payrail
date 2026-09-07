@@ -28,6 +28,8 @@ Checked against live docs on 2026-09-07. Each line either confirms a roadmap ass
 
 **Plan:** register the company name on Sepolia at app.ens.dev. Supplier subnames carry text records `payrail.addr.arc`, `payrail.terms`, `payrail.discount.bps`, `payrail.worldid`.
 
+**Day 1 result (2026-09-07):** `payrail.eth` registered on ENSv2 Sepolia, owned by the burner wallet. Registration was gasless (burner nonce stayed 0). The app deployed a per-account resolver at `0x65044F7DFb2183bB4Ce5cb022c7CF80431d8C252`. `setText` from the burner key succeeded on the parent node and on `acme.payrail.eth` without any subname having been created in a registry: UniversalResolverV2 falls back to the parent resolver (wildcard resolution, ENSIP-10) and returns the record. So supplier onboarding is one `setText` per key, no registry calls, no roles. Tokenized subnames through a UserRegistry stay a stretch for the "subname tokenization" part of the bounty; records-first is what ships.
+
 ## World ID Selfie Check
 
 - World is the sponsor. Tools for Humanity is the company that builds World and World ID, which is why the generic docs point at a toolsforhumanity.com email. Hackers do not use that email.
