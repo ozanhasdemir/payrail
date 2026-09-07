@@ -1,0 +1,14 @@
+{
+  "name": "payrail",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Agentic accounts-payable rail for wholesale B2B. ETHOnline 2026.",
+  "license": "MIT",
+  "packageManager": "pnpm@9",
+  "scripts": {
+    "agent": "pnpm --filter @payrail/agent dev",
+    "web": "pnpm --filter @payrail/web dev",
+    "contracts:test": "cd contracts && forge test -vvv",
+    "contracts:build": "cd contracts && forge build"
+  }
+}

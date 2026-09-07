@@ -1,0 +1,30 @@
+# secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# node
+node_modules/
+dist/
+.next/
+out/
+*.tsbuildinfo
+.turbo/
+
+# foundry
+contracts/out/
+contracts/cache/
+contracts/lib/
+contracts/broadcast/**/dry-run/
+
+# subgraph
+subgraph/generated/
+subgraph/build/
+
+# os / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
