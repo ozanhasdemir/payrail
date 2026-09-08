@@ -26,8 +26,9 @@ import { AUTO_PAY_CAP, DEMO_SCALE, processInvoiceFile } from "./pipeline/run.js"
 import { deposit, onChainInvoice, poolStats, quote, receivableOwner, sellReceivable } from "./pool/pool.js";
 import { opsWalletAddress, treasuryWalletAddress } from "./pay/privy.js";
 import { resolveSupplier } from "./resolve/ens.js";
-import { findInvoice, listInvoices } from "./store.js";
+import { findInvoice, listInvoices, resetState } from "./store.js";
 import { DEMO_SUPPLIERS, supplierAddress } from "./suppliers.js";
+import { requestContext, verifyAndBind } from "./verify/world.js";
 
 const c = config();
 const app = new Hono();
@@ -56,6 +57,9 @@ app.get("/api/health", (ctx) =>
 );
 
 app.get("/api/invoices", (ctx) => ctx.json(json(listInvoices())));
+
+/** Start a fresh demo: clears agent memory and salts document hashes so fixtures replay as new invoices. */
+app.post("/api/demo/reset", (ctx) => ctx.json(resetState()));
 
 app.get("/api/invoices/:id", async (ctx) => {
   const id = ctx.req.param("id");
@@ -105,6 +109,22 @@ app.post("/api/invoices/:id/sell", async (ctx) => {
   } catch (e) {
     return ctx.json({ error: (e as Error).message }, 400);
   }
+});
+
+// ---- World ID: supplier onboarding ----
+app.get("/api/world/request", (ctx) => {
+  try {
+    return ctx.json(requestContext());
+  } catch (e) {
+    return ctx.json({ error: (e as Error).message }, 400);
+  }
+});
+
+app.post("/api/world/verify", async (ctx) => {
+  const { supplier, idkitResponse } = (await ctx.req.json()) as { supplier: string; idkitResponse: unknown };
+  if (!supplier || !idkitResponse) return ctx.json({ error: "supplier and idkitResponse required" }, 400);
+  const out = await verifyAndBind(supplier, idkitResponse);
+  return ctx.json(out, out.ok ? 200 : 400);
 });
 
 app.get("/api/pool", async (ctx) => ctx.json(json(await poolStats())));

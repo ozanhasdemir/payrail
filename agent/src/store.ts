@@ -45,6 +45,15 @@ export interface ProcessedInvoice {
 
 export interface AgentState {
   invoices: Record<string, ProcessedInvoice>; // keyed by docHash
+  /** Demo salt mixed into document hashes so the same fixtures can be re-run as new documents. */
+  salt?: string;
+}
+
+/** Wipe working memory and start a new demo run. On-chain history is untouched. */
+export function resetState(): AgentState {
+  const state: AgentState = { invoices: {}, salt: Date.now().toString(36) };
+  saveState(state);
+  return state;
 }
 
 const dataDir = () => {

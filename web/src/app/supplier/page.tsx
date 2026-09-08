@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { api, money, usdc, daysUntil, type Health, type Invoice, type Supplier } from "@/lib/api";
 import { AddrLink, Button, Card, Empty, Stat, StatusPill, TxLink } from "@/components/ui";
+import { WorldVerify } from "@/components/WorldVerify";
 
 export default function SupplierPage() {
   const [health, setHealth] = useState<Health | null>(null);
@@ -85,7 +86,9 @@ export default function SupplierPage() {
               <dt className="text-slate-500">Max discount</dt>
               <dd>{sup.resolved.discountBps ? `${sup.resolved.discountBps / 100}%` : "—"}</dd>
               <dt className="text-slate-500">World ID</dt>
-              <dd>{sup.resolved.worldId ? <span className="text-emerald-700">verified human</span> : <span className="text-slate-500">not verified</span>}</dd>
+              <dd>
+                <WorldVerify supplierEns={sup.ens} verified={!!sup.resolved.worldId} onVerified={refresh} />
+              </dd>
             </dl>
             <p className="mt-3 text-xs text-slate-500">
               Records live on <span className="font-mono">payrail.eth</span>&apos;s ENSv2 resolver on Sepolia and resolve through wildcard lookup. Onboarding a supplier is a name, not a config change.

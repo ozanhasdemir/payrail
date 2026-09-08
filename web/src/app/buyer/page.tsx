@@ -71,9 +71,28 @@ export default function BuyerPage() {
           <h1 className="text-xl font-semibold tracking-tight">Accounts payable</h1>
           <p className="text-sm text-slate-500">Invoices arrive as EDI 810. The agent matches, resolves the supplier from ENS, and pays under policy.</p>
         </div>
-        <Button onClick={run} busy={busy === "run"}>
-          Process inbox
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            busy={busy === "reset"}
+            onClick={async () => {
+              if (!confirm("Clear the agent's memory and start a fresh demo run? On-chain history stays.")) return;
+              setBusy("reset");
+              try {
+                await api.reset();
+                setLogs([]);
+              } finally {
+                setBusy(null);
+                refresh();
+              }
+            }}
+          >
+            Reset demo
+          </Button>
+          <Button onClick={run} busy={busy === "run"}>
+            Process inbox
+          </Button>
+        </div>
       </div>
 
       {error && <div className="rounded-md border border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-800">{error}</div>}

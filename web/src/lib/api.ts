@@ -90,6 +90,7 @@ export const api = {
   health: () => req<Health>("/api/health"),
   invoices: () => req<Invoice[]>("/api/invoices"),
   invoice: (id: string) => req<InvoiceDetail>(`/api/invoices/${id}`),
+  reset: () => req<{ salt: string }>("/api/demo/reset", { method: "POST" }),
   run: (file?: string) => req<{ results: Invoice[]; logs: string[] }>("/api/run", { method: "POST", body: JSON.stringify({ file }) }),
   approve: (id: string, approver: "1" | "2") => req<Invoice>(`/api/invoices/${id}/approve`, { method: "POST", body: JSON.stringify({ approver }) }),
   quote: (id: string) => req<{ payout: string; discount: string }>(`/api/invoices/${id}/quote`),

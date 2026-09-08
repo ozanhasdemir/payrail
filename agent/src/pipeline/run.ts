@@ -46,10 +46,12 @@ export interface RunOptions {
 export async function processInvoiceFile(path: string, opts: RunOptions): Promise<ProcessedInvoice> {
   const log = opts.log ?? (() => {});
   const raw = readFileSync(path);
-  const docHash = keccak256(toHex(raw));
+  const state = loadState();
+  // Same bytes = same document = same on-chain record. The demo salt lets us replay fixtures.
+  const docHash = keccak256(toHex(state.salt ? Buffer.concat([raw, Buffer.from(state.salt)]) : raw));
 
   // Resume if we have seen this document before.
-  const existing = loadState().invoices[docHash];
+  const existing = state.invoices[docHash];
   if (existing && ["paid", "rejected", "pending_approval", "blocked"].includes(existing.status)) {
     log(`already processed: ${existing.invoiceNumber} is ${existing.status}`);
     return existing;
