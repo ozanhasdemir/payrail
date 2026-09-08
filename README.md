@@ -6,7 +6,20 @@ An invoice arrives the way it does today, as an EDI 810 or a PDF. The buyer's ag
 
 ## Status
 
-Day 1 of 6. Scaffold only. Roadmap and daily gates are tracked in `docs/`.
+Working end to end on Arc testnet: three fixture invoices produce three outcomes (auto-paid, approved and queued for 2-of-3 approval, rejected on-chain with match reasons), a supplier sells a receivable to the pool, and the approvers' payment settles into the pool. Dashboard covers buyer, supplier and pool. Roadmap and daily gates in `docs/`.
+
+## Demo flow
+
+1. Buyer page, **Process inbox**: the agent parses three EDI 810s, three-way matches them against POs and receipts, resolves each supplier from `*.payrail.eth`, and records them on Arc from the Privy ops wallet.
+   - Acme Foods, $4,200 clean: approved and paid automatically (4.2 USDC, under the 5 USDC policy cap).
+   - Blue Ridge Packaging, $12,600 clean: approved, then Privy refuses the ops wallet and the invoice waits for humans.
+   - Northwind Beverages, $6,850: price variance and short receipt, recorded then rejected on-chain with the reasons.
+2. Supplier page, Blue Ridge, **Sell to pool**: the receivable token moves to the pool, Blue Ridge gets face value minus a 12% APR discount today.
+3. Buyer page, **Approve as Controller** then **Approve as CFO**: two quorum keys sign, the treasury wallet pays, and the money lands in the pool because the pool holds the receivable.
+4. Pool page: NAV rose by the discount at purchase; cash is back after settlement.
+5. Supplier page, **Verify with World ID**: prove a human backs the supplier; the nullifier is written into the supplier's ENS record.
+
+**Reset demo** clears the agent's memory and salts document hashes so the same three files replay as new invoices.
 
 ## Layout
 
@@ -33,12 +46,27 @@ Day 1 of 6. Scaffold only. Roadmap and daily gates are tracked in `docs/`.
 ## Run locally
 
 ```bash
-corepack enable && corepack prepare pnpm@9 --activate
+npm install -g pnpm@9
 pnpm install
-cp .env.example .env   # fill in keys
-pnpm agent
-pnpm web
+cp .env.example .env   # fill in keys, see comments in the file
+pnpm --filter @payrail/agent dev     # agent API on :8790
+pnpm --filter @payrail/web dev       # dashboard on :3000
 ```
+
+Agent CLI without the dashboard:
+
+```bash
+cd agent
+pnpm cli run-all                 # process the three fixtures
+pnpm cli list                    # agent state
+pnpm cli approve <id> 1          # first approver
+pnpm cli approve <id> 2          # second approver, pays from treasury
+pnpm cli sell <id>               # supplier sells receivable to the pool
+pnpm cli pool [seed <usdc>]      # pool stats, optional LP deposit
+pnpm test                        # parser and matcher unit tests
+```
+
+One-time setup scripts, all idempotent: `agent/src/scripts/privy-policies.ts` (Privy policy rules), `agent/src/scripts/ens-suppliers.ts` (supplier ENS records).
 
 Contracts: see `contracts/README.md`.
 
