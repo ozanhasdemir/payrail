@@ -5,8 +5,8 @@ Six days, Sept 7 to 12, submission Friday night, hard stop Saturday Sept 13 10:0
 | Day | Goal | Gate |
 |---|---|---|
 | Sun 7 | Every external dependency proven with one real tx | DONE: Privy policy-gated pay on Arc, ENS records via wildcard, contracts deployed and verified |
-| Mon 8 | Contracts deployed, agent parses and matches | Fixture 810 becomes an approved invoice on-chain |
-| Tue 9 | Money moves both paths | Auto-pay, blocked then approved pay, one receivable sold |
+| Mon 8 | Contracts deployed, agent parses and matches | DONE early: run-all gives paid / pending_approval / rejected on Arc |
+| Tue 9 | Money moves both paths | DONE Mon: auto-pay, 2-of-3 approval pays the pool, receivable sold at 12% APR discount |
 | Wed 10 | Dashboard complete, pool flow polished | Full demo runs without touching code |
 | Thu 11 | Stretch tracks, then polish | Feature freeze 20:00 ET |
 | Fri 12 | Video, README, submit | Submitted |
