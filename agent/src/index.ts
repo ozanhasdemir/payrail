@@ -16,7 +16,7 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { createPublicClient, formatEther, http, type Address, type Hex } from "viem";
 import { arcTestnet } from "./chains.js";
@@ -55,6 +55,29 @@ app.get("/api/health", (ctx) =>
     explorer: c.ARC_EXPLORER_URL,
   }),
 );
+
+/** The inbox: EDI 810 files waiting to be processed. In production this is an SFTP drop, a VAN, or a mailbox. */
+app.get("/api/inbox", (ctx) => {
+  const dir = join(fixturesDir, "edi810");
+  const processed = new Set(listInvoices().map((i) => i.file));
+  const files = readdirSync(dir)
+    .filter((f) => f.endsWith(".edi"))
+    .map((f) => {
+      const raw = readFileSync(join(dir, f), "utf8");
+      const big = raw.split("~").find((s) => s.trim().startsWith("BIG"))?.split("*") ?? [];
+      const su = raw.split("~").find((s) => s.trim().startsWith("N1*SU"))?.split("*") ?? [];
+      return { file: f, bytes: raw.length, invoiceNumber: big[2] ?? "", poNumber: big[4] ?? "", supplier: su[2] ?? "", processed: processed.has(f) };
+    });
+  return ctx.json(files);
+});
+
+app.get("/api/inbox/:file", (ctx) => {
+  const f = ctx.req.param("file");
+  if (!/^[\w.-]+\.edi$/.test(f)) return ctx.json({ error: "bad file name" }, 400);
+  const p = join(fixturesDir, "edi810", f);
+  if (!existsSync(p)) return ctx.json({ error: "not found" }, 404);
+  return ctx.text(readFileSync(p, "utf8"));
+});
 
 app.get("/api/invoices", (ctx) => ctx.json(json(listInvoices())));
 

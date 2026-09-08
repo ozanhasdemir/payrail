@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { api, money, usdc, daysUntil, type Health, type Invoice, type Wallets } from "@/lib/api";
+import { api, money, usdc, daysUntil, type Health, type InboxFile, type Invoice, type Wallets } from "@/lib/api";
 import { AddrLink, Button, Card, Empty, Stat, StatusPill, TxLink } from "@/components/ui";
 
 export default function BuyerPage() {
   const [health, setHealth] = useState<Health | null>(null);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [inbox, setInbox] = useState<InboxFile[]>([]);
+  const [openFile, setOpenFile] = useState<{ name: string; raw: string } | null>(null);
   const [wallets, setWallets] = useState<Wallets>({});
   const [logs, setLogs] = useState<string[]>([]);
   const [busy, setBusy] = useState<string | null>(null);
@@ -14,10 +16,11 @@ export default function BuyerPage() {
 
   const refresh = useCallback(async () => {
     try {
-      const [h, i, w] = await Promise.all([api.health(), api.invoices(), api.wallets()]);
+      const [h, i, w, ib] = await Promise.all([api.health(), api.invoices(), api.wallets(), api.inbox()]);
       setHealth(h);
       setInvoices([...i].reverse());
       setWallets(w);
+      setInbox(ib);
       setError(null);
     } catch (e) {
       setError(`Agent API unreachable at ${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8790"}: ${(e as Error).message}`);
@@ -30,18 +33,30 @@ export default function BuyerPage() {
     return () => clearInterval(t);
   }, [refresh]);
 
-  const run = async () => {
-    setBusy("run");
+  /** Process files one at a time so the log and the queue build up in front of the viewer. */
+  const run = async (only?: string) => {
+    setBusy(only ?? "run");
     setLogs([]);
     try {
-      const r = await api.run();
-      setLogs(r.logs);
+      const files = only ? [only] : inbox.filter((f) => !f.processed).map((f) => f.file);
+      for (const f of files) {
+        setLogs((l) => [...l, `▶ ${f}`]);
+        const r = await api.run(f);
+        setLogs((l) => [...l, ...r.logs.map((x) => "   " + x.replace(/^[^:]+: /, ""))]);
+        await refresh();
+      }
+      if (files.length === 0) setLogs(["Inbox is empty. Reset demo to replay the fixtures."]);
     } catch (e) {
       setError((e as Error).message);
     } finally {
       setBusy(null);
       refresh();
     }
+  };
+
+  const viewFile = async (name: string) => {
+    if (openFile?.name === name) return setOpenFile(null);
+    setOpenFile({ name, raw: await api.inboxFile(name) });
   };
 
   const approve = async (id: string, approver: "1" | "2") => {
@@ -89,13 +104,46 @@ export default function BuyerPage() {
           >
             Reset demo
           </Button>
-          <Button onClick={run} busy={busy === "run"}>
+          <Button onClick={() => run()} busy={busy === "run"} disabled={inbox.every((f) => f.processed)}>
             Process inbox
           </Button>
         </div>
       </div>
 
       {error && <div className="rounded-md border border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-800">{error}</div>}
+
+      <Card title="Inbox" right={<span className="text-xs text-slate-500">EDI 810 drop folder · {inbox.filter((f) => !f.processed).length} unprocessed</span>}>
+        <div className="flex flex-col gap-2">
+          {inbox.map((f) => (
+            <div key={f.file} className={`rounded-md border px-3 py-2 ${f.processed ? "border-slate-200 bg-slate-50 text-slate-500" : "border-slate-200 bg-white"}`}>
+              <div className="flex flex-wrap items-center gap-3 text-sm">
+                <button onClick={() => viewFile(f.file)} className="font-mono text-xs text-teal-700 underline-offset-2 hover:underline">
+                  {f.file}
+                </button>
+                <span className="text-xs text-slate-500">{f.supplier} · {f.invoiceNumber} · PO {f.poNumber} · {f.bytes} bytes</span>
+                <span className="ml-auto flex items-center gap-2">
+                  {f.processed ? (
+                    <span className="text-xs">processed</span>
+                  ) : (
+                    <Button variant="ghost" busy={busy === f.file} onClick={() => run(f.file)}>
+                      Process this file
+                    </Button>
+                  )}
+                </span>
+              </div>
+              {openFile?.name === f.file && (
+                <pre className="mt-2 max-h-56 overflow-auto rounded bg-slate-900 p-3 font-mono text-[11px] leading-relaxed text-slate-100">{openFile.raw.replace(/~/g, "~\n")}</pre>
+              )}
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      {logs.length > 0 && (
+        <Card title="Agent log">
+          <pre className="max-h-72 overflow-auto whitespace-pre-wrap font-mono text-xs leading-relaxed text-slate-700">{logs.join("\n")}</pre>
+        </Card>
+      )}
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <Stat label="Paid" value={money(totals.paid)} sub={`${invoices.filter((i) => i.status === "paid").length} invoices`} />
@@ -210,11 +258,6 @@ export default function BuyerPage() {
         )}
       </Card>
 
-      {logs.length > 0 && (
-        <Card title="Agent log">
-          <pre className="max-h-64 overflow-auto whitespace-pre-wrap font-mono text-xs text-slate-700">{logs.join("\n")}</pre>
-        </Card>
-      )}
     </div>
   );
 }

@@ -86,8 +86,19 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
   return body as T;
 }
 
+export interface InboxFile {
+  file: string;
+  bytes: number;
+  invoiceNumber: string;
+  poNumber: string;
+  supplier: string;
+  processed: boolean;
+}
+
 export const api = {
   health: () => req<Health>("/api/health"),
+  inbox: () => req<InboxFile[]>("/api/inbox"),
+  inboxFile: async (file: string) => (await fetch(`${API}/api/inbox/${file}`, { cache: "no-store" })).text(),
   invoices: () => req<Invoice[]>("/api/invoices"),
   invoice: (id: string) => req<InvoiceDetail>(`/api/invoices/${id}`),
   reset: () => req<{ salt: string }>("/api/demo/reset", { method: "POST" }),
