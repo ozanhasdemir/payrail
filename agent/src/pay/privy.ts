@@ -119,6 +119,22 @@ export const opsWalletAddress = (): Address => config().PRIVY_BUYER_WALLET_ADDRE
 export const treasuryWalletAddress = (): Address | undefined =>
   config().PRIVY_TREASURY_WALLET_ADDRESS as Address | undefined;
 
+/** Record a parsed invoice on-chain from the ops wallet. Zero value, within the ops policy. */
+export function submitInvoice(args: {
+  docHash: Hex;
+  supplier: Address;
+  amount: bigint;
+  dueDate: bigint;
+  invoiceNumber: string;
+}): Promise<PayResult> {
+  const data = encodeFunctionData({
+    abi: invoiceRegistryAbi,
+    functionName: "submit",
+    args: [args.docHash, opsWalletAddress(), args.supplier, args.amount, args.dueDate, args.invoiceNumber],
+  });
+  return send("ops", { to: config().INVOICE_REGISTRY_ADDRESS as Address, data }, agentKeys());
+}
+
 /** Buyer approves an invoice. Zero value, so always within the ops policy. */
 export function approveInvoice(id: bigint, wallet: "ops" | "treasury" = "ops"): Promise<PayResult> {
   const data = encodeFunctionData({ abi: invoiceRegistryAbi, functionName: "approve", args: [id] });
