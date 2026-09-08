@@ -45,6 +45,7 @@ const schema = z.object({
   ENS_COMPANY_NAME: z.string().default("payrail.eth"),
   ENS_OWNER_PRIVATE_KEY: hex.optional(),
   ENS_PAYRAIL_RESOLVER: address.optional(),
+  ENS_UNIVERSAL_RESOLVER_V2: address.default("0x4a1817d13e9cf196f471725176355c1234b63c70"),
 
   // World
   WORLD_APP_ID: z.string().optional(),

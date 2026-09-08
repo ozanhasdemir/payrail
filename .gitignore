@@ -27,3 +27,6 @@ subgraph/build/
 Thumbs.db
 .vscode/
 .idea/
+
+# agent local state
+agent/data/
