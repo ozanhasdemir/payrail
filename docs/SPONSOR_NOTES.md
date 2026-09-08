@@ -60,3 +60,8 @@ Checked against live docs on 2026-09-07. Each line either confirms a roadmap ass
 
 - Exact ENSv2 subname creation calls (Day 1, me).
 - Whether Privy's dashboard lets us add Arc as a custom chain for the server wallet, or whether the SDK just needs the chain id in the request (Day 1 smoke test).
+
+## World feedback notes (raw, for the required feedback document)
+
+- 2026-09-08: Sandbox Access Form submitted the evening before; Firebase App Distribution invite for `org.world.id.sandbox` arrived within hours. Invite is Android only; the email does not say so up front. iOS testers must email the developer contact for a TestFlight build. Instructions require enabling installs from unknown sources.
+- Selfie Check feature flag on the app: not yet confirmed as of this note.
