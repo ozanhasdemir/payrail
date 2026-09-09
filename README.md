@@ -6,7 +6,7 @@ An invoice arrives the way it does today, as an EDI 810 or a PDF. The buyer's ag
 
 ## Status
 
-Working end to end on Arc testnet: three fixture invoices produce three outcomes (auto-paid, approved and queued for 2-of-3 approval, rejected on-chain with match reasons), a supplier sells a receivable to the pool, and the approvers' payment settles into the pool. Dashboard covers buyer, supplier and pool. Roadmap and daily gates in `docs/`.
+Working end to end on Arc testnet: three fixture invoices produce three outcomes (auto-paid, approved and queued for 2-of-3 approval, rejected on-chain with match reasons), a supplier sells a receivable to the pool, and the approvers' payment settles into the pool. Dashboard covers buyer, supplier and pool. 
 
 ## Demo flow
 
