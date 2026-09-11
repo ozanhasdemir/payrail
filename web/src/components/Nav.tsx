@@ -15,7 +15,8 @@ export function Nav() {
     <header className="border-b border-slate-200 bg-white">
       <div className="mx-auto flex max-w-6xl items-center gap-8 px-6 py-3">
         <Link href="/buyer" className="flex items-center gap-2">
-          <span className="grid h-7 w-7 place-items-center rounded-md bg-teal-700 font-mono text-sm font-bold text-white">PR</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="PayRail" width={28} height={28} className="h-7 w-7 rounded-md" />
           <span className="text-base font-semibold tracking-tight text-slate-900">PayRail</span>
         </Link>
         <nav className="flex gap-1">
